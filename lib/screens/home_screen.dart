@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/task_model.dart';
-
+import 'package:provider/provider.dart';
+import '../providers/task_provider.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -10,12 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isChecked = false;
-  List<Task> _dummyData = [
-    Task(title: 'Complete this project', isDone: false),
-    Task(title: 'Have meals', isDone: false),
-    Task(title: 'Study MP', isDone: false),
-    Task(title: 'Study CG', isDone: false),
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,21 +54,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     topRight: Radius.circular(25)),
               ),
               child: ListView.builder(
-                itemCount: _dummyData.length,
+                itemCount: Provider.of<TaskProvider>(context).dummyData.length,
                 itemBuilder: (context, index) => ListTile(
                   title: Text(
-                    _dummyData[index].title,
+                    Provider.of<TaskProvider>(context).dummyData[index].title,
                     style:  TextStyle(
-                      decoration:_dummyData[index].isDone ? TextDecoration.lineThrough:null,
+                      decoration:Provider.of<TaskProvider>(context).dummyData[index].isDone ? TextDecoration.lineThrough:null,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),
                   ),
                   trailing: Checkbox(
-                    value: _dummyData[index].isDone,
+                    value: Provider.of<TaskProvider>(context).dummyData[index].isDone,
                     onChanged: (bool? value) {
                       setState(() {
-                        _dummyData[index].isDone = value!;
+                        Provider.of<TaskProvider>(context,listen: false).dummyData[index].isDone = value!;
 
                       });
                     },
