@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import '../models/task_model.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  bool isChecked = false;
+  List<Task> _dummyData = [
+    Task(title: 'Complete this project', isDone: false),
+    Task(title: 'Have meals', isDone: false),
+    Task(title: 'Study MP', isDone: false),
+    Task(title: 'Study CG', isDone: false),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -9,10 +23,14 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
       ),
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: Colors.orange,
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
-        child:const Icon(Icons.add,size: 30,),
+        onPressed: () {},
+        child: const Icon(
+          Icons.add,
+          size: 30,
+          color: Colors.white,
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -33,11 +51,32 @@ class HomeScreen extends StatelessWidget {
           ),
           Expanded(
             child: Container(
-              decoration:const  BoxDecoration(
-               color: Colors.white,
+              decoration: const BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25)
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25)),
+              ),
+              child: ListView.builder(
+                itemCount: _dummyData.length,
+                itemBuilder: (context, index) => ListTile(
+                  title: Text(
+                    _dummyData[index].title,
+                    style:  TextStyle(
+                      decoration:_dummyData[index].isDone ? TextDecoration.lineThrough:null,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  trailing: Checkbox(
+                    value: _dummyData[index].isDone,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _dummyData[index].isDone = value!;
+
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
