@@ -8,5 +8,18 @@ class TaskProvider extends ChangeNotifier{
     Task(title: 'Study CG', isDone: false),
   ];
 
+  get itemCount{
+    return dummyData.length;
+  }
+
+  void addTask(String title){
+    dummyData.add(Task(title: title,isDone: false));
+    notifyListeners();
+  }
+
+  void deleteTask(int index){
+    dummyData.removeAt(index);
+    notifyListeners();
+  }
 
 }

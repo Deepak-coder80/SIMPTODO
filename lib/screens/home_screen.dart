@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/task_model.dart';
 import 'package:provider/provider.dart';
+import 'package:simptodo/components/add_todo.dart';
 import '../providers/task_provider.dart';
+
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -21,7 +23,16 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Colors.orange,
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          showModalBottomSheet(
+            isScrollControlled: true,
+            context: context, builder: (context)=>SingleChildScrollView(
+            child: Container(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: const AddTask(),
+            ),
+          ));
+        },
         child: const Icon(
           Icons.add,
           size: 30,
@@ -54,26 +65,37 @@ class _HomeScreenState extends State<HomeScreen> {
                     topRight: Radius.circular(25)),
               ),
               child: ListView.builder(
-                itemCount: Provider.of<TaskProvider>(context).dummyData.length,
-                itemBuilder: (context, index) => ListTile(
-                  title: Text(
-                    Provider.of<TaskProvider>(context).dummyData[index].title,
-                    style:  TextStyle(
-                      decoration:Provider.of<TaskProvider>(context).dummyData[index].isDone ? TextDecoration.lineThrough:null,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                itemCount: Provider
+                    .of<TaskProvider>(context)
+                    .itemCount,
+                itemBuilder: (context, index) =>
+                    ListTile(
+                      title: Text(
+                        Provider
+                            .of<TaskProvider>(context)
+                            .dummyData[index].title,
+                        style: TextStyle(
+                          decoration: Provider
+                              .of<TaskProvider>(context)
+                              .dummyData[index].isDone ? TextDecoration
+                              .lineThrough : null,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      trailing: Checkbox(
+                        value: Provider
+                            .of<TaskProvider>(context)
+                            .dummyData[index].isDone,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            Provider
+                                .of<TaskProvider>(context, listen: false)
+                                .dummyData[index].isDone = value!;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  trailing: Checkbox(
-                    value: Provider.of<TaskProvider>(context).dummyData[index].isDone,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        Provider.of<TaskProvider>(context,listen: false).dummyData[index].isDone = value!;
-
-                      });
-                    },
-                  ),
-                ),
               ),
             ),
           ),
