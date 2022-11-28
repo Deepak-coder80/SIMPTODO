@@ -1,7 +1,9 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import '../models/task_model.dart';
 class TaskProvider extends ChangeNotifier{
-  List<Task> dummyData = [
+  List<Task> _dummyData = [
     Task(title: 'Complete this project', isDone: false),
     Task(title: 'Have meals', isDone: false),
     Task(title: 'Study MP', isDone: false),
@@ -9,16 +11,21 @@ class TaskProvider extends ChangeNotifier{
   ];
 
   get itemCount{
-    return dummyData.length;
+    return _dummyData.length;
+  }
+
+  UnmodifiableListView<Task> get tasks{
+    return UnmodifiableListView(_dummyData);
   }
 
   void addTask(String title){
-    dummyData.add(Task(title: title,isDone: false));
+    _dummyData.add(Task(title: title,isDone: false));
     notifyListeners();
   }
 
   void deleteTask(int index){
-    dummyData.removeAt(index);
+    _dummyData.removeAt(index);
+
     notifyListeners();
   }
 

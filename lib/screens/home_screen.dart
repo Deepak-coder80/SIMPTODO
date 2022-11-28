@@ -70,28 +70,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     .itemCount,
                 itemBuilder: (context, index) =>
                     ListTile(
-                      title: Text(
-                        Provider
-                            .of<TaskProvider>(context)
-                            .dummyData[index].title,
-                        style: TextStyle(
-                          decoration: Provider
-                              .of<TaskProvider>(context)
-                              .dummyData[index].isDone ? TextDecoration
-                              .lineThrough : null,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      title: GestureDetector(
+                        onLongPress: (){
+                          Provider.of<TaskProvider>(context,listen: false).deleteTask(index);
+                        },
+                        child: Text(
+                          Provider
+                              .of<TaskProvider>(context).tasks[index].title,
+                          style: TextStyle(
+                            decoration: Provider
+                                .of<TaskProvider>(context)
+                                .dummyData[index].isDone ? TextDecoration
+                                .lineThrough : null,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                       trailing: Checkbox(
                         value: Provider
                             .of<TaskProvider>(context)
-                            .dummyData[index].isDone,
+                            .tasks[index].isDone,
                         onChanged: (bool? value) {
                           setState(() {
                             Provider
                                 .of<TaskProvider>(context, listen: false)
-                                .dummyData[index].isDone = value!;
+                                .tasks[index].isDone = value!;
                           });
                         },
                       ),
