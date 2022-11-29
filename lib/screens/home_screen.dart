@@ -75,12 +75,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           Provider.of<TaskProvider>(context,listen: false).deleteTask(index);
                         },
                         child: Text(
+
                           Provider
                               .of<TaskProvider>(context).tasks[index].title,
                           style: TextStyle(
                             decoration: Provider
                                 .of<TaskProvider>(context)
-                                .dummyData[index].isDone ? TextDecoration
+                                .tasks[index].isDone ? TextDecoration
                                 .lineThrough : null,
                             fontWeight: FontWeight.bold,
                             fontSize: 18,

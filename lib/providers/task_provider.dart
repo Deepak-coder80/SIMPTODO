@@ -1,32 +1,50 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:simptodo/database/database_helper.dart';
 import '../models/task_model.dart';
-class TaskProvider extends ChangeNotifier{
-  List<Task> _dummyData = [
-    Task(title: 'Complete this project', isDone: false),
-    Task(title: 'Have meals', isDone: false),
-    Task(title: 'Study MP', isDone: false),
-    Task(title: 'Study CG', isDone: false),
-  ];
 
-  get itemCount{
-    return _dummyData.length;
+class TaskProvider extends ChangeNotifier {
+  List<Task> _items = [];
+
+  get itemCount {
+    fetchAndSetPlace();
+    return _items.length;
   }
 
-  UnmodifiableListView<Task> get tasks{
-    return UnmodifiableListView(_dummyData);
-  }
-
-  void addTask(String title){
-    _dummyData.add(Task(title: title,isDone: false));
+  Future<void> fetchAndSetPlace() async {
+    final dataList = await DBHelper.getData('todos');
+    _items = dataList
+        .map((item) => Task(
+              title: item['title'],
+              isDone: item['isDone']==1?true:false,
+            ))
+        .toList();
     notifyListeners();
   }
 
-  void deleteTask(int index){
-    _dummyData.removeAt(index);
+  List<Task> get tasks {
+    fetchAndSetPlace();
+    return [..._items];
+  }
 
+  void addTask(String title) {
+    final newTask = Task(
+      title: title,
+      isDone: false,
+    );
+    _items.add(newTask);
+
+    DBHelper.insert('todos', {
+      'title': newTask.title,
+      'isDone': newTask.isDone==true ? 1 : 0,
+    });
     notifyListeners();
   }
 
+  void deleteTask(int index) {
+    _items.removeAt(index);
+
+    notifyListeners();
+  }
 }
