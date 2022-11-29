@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:simptodo/components/add_todo.dart';
 import '../providers/task_provider.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -13,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   bool isChecked = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +23,15 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-            isScrollControlled: true,
-            context: context, builder: (context)=>SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-              child: const AddTask(),
-            ),
-          ));
+              isScrollControlled: true,
+              context: context,
+              builder: (context) => SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: const AddTask(),
+                    ),
+                  ));
         },
         child: const Icon(
           Icons.add,
@@ -65,42 +65,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     topRight: Radius.circular(25)),
               ),
               child: ListView.builder(
-                itemCount: Provider
-                    .of<TaskProvider>(context)
-                    .itemCount,
-                itemBuilder: (context, index) =>
-                    ListTile(
-                      title: GestureDetector(
-                        onLongPress: (){
-                          Provider.of<TaskProvider>(context,listen: false).deleteTask(index);
-                        },
-                        child: Text(
-
-                          Provider
-                              .of<TaskProvider>(context).tasks[index].title,
-                          style: TextStyle(
-                            decoration: Provider
-                                .of<TaskProvider>(context)
-                                .tasks[index].isDone ? TextDecoration
-                                .lineThrough : null,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                      trailing: Checkbox(
-                        value: Provider
-                            .of<TaskProvider>(context)
-                            .tasks[index].isDone,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            Provider
-                                .of<TaskProvider>(context, listen: false)
-                                .tasks[index].isDone = value!;
-                          });
-                        },
+                itemCount: Provider.of<TaskProvider>(context).itemCount,
+                itemBuilder: (context, index) => ListTile(
+                  title: GestureDetector(
+                    onLongPress: () {
+                      Provider.of<TaskProvider>(context, listen: false)
+                          .deleteTask(
+                        Provider.of<TaskProvider>(context, listen: false)
+                            .tasks[index]
+                            .id,
+                      );
+                    },
+                    child: Text(
+                      Provider.of<TaskProvider>(context).tasks[index].title,
+                      style: TextStyle(
+                        decoration: Provider.of<TaskProvider>(context)
+                                .tasks[index]
+                                .isDone
+                            ? TextDecoration.lineThrough
+                            : null,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
                     ),
+                  ),
+                  trailing: Checkbox(
+                    value:
+                        Provider.of<TaskProvider>(context).tasks[index].isDone,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        Provider.of<TaskProvider>(context, listen: false)
+                            .tasks[index]
+                            .isDone = value!;
+                      });
+                    },
+                  ),
+                ),
               ),
             ),
           ),

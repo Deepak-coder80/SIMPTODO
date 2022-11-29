@@ -16,6 +16,7 @@ class TaskProvider extends ChangeNotifier {
     final dataList = await DBHelper.getData('todos');
     _items = dataList
         .map((item) => Task(
+              id: item['id'],
               title: item['title'],
               isDone: item['isDone']==1?true:false,
             ))
@@ -30,21 +31,20 @@ class TaskProvider extends ChangeNotifier {
 
   void addTask(String title) {
     final newTask = Task(
+      id: DateTime.now().toString(),
       title: title,
       isDone: false,
     );
-    _items.add(newTask);
-
     DBHelper.insert('todos', {
+      'id': newTask.id,
       'title': newTask.title,
       'isDone': newTask.isDone==true ? 1 : 0,
     });
     notifyListeners();
   }
 
-  void deleteTask(int index) {
-    _items.removeAt(index);
-
+  void deleteTask(String id) async{
+    await DBHelper.deleteData('todos',id);
     notifyListeners();
   }
 }

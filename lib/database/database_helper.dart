@@ -9,7 +9,7 @@ class DBHelper {
       path.join(dbPath, 'todo.db'),
       onCreate: (db, version) {
         return db.execute(
-            'CREATE TABLE todos(id TEXT PRIMARY KEY,title TEXT,isDone BOOLEAN)');
+            'CREATE TABLE todos(id TEXT PRIMARY KEY ,title TEXT,isDone BOOLEAN)');
       },
       version: 1,
     );
@@ -30,5 +30,11 @@ class DBHelper {
   static Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await DBHelper.database();
     return db.query(table);
+  }
+
+  //delete data
+  static Future<void> deleteData(String table,String id) async{
+    final db = await DBHelper.database();
+    await db.delete(table,where: 'id=?',whereArgs: [id]);
   }
 }
