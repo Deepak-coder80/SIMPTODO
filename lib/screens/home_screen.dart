@@ -93,11 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     value:
                         Provider.of<TaskProvider>(context).tasks[index].isDone,
                     onChanged: (bool? value) {
-                      setState(() {
-                        Provider.of<TaskProvider>(context, listen: false)
-                            .tasks[index]
-                            .isDone = value!;
-                      });
+                      setState(
+                        () {
+                          Provider.of<TaskProvider>(context, listen: false)
+                              .tasks[index]
+                              .isDone = value!;
+                        },
+                      );
                     },
                   ),
                 ),
